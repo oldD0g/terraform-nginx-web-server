@@ -1,3 +1,6 @@
+# Local values that I don't want to publish
+private-values.tf
+
 # Local .terraform directories
 **/.terraform/*
 
