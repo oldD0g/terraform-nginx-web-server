@@ -1,5 +1,6 @@
 # Local values that I don't want to publish
 private-values.tf
+ubuntu-key
 
 # Local .terraform directories
 **/.terraform/*
