@@ -14,7 +14,10 @@ output "nginx_public_ip" {
    value = azurerm_linux_virtual_machine.nginx.public_ip_address
 }
 
-output "tls_private_key" {
-  value     = tls_private_key.ubuntu_ssh.private_key_pem
-  sensitive = true
+output "ssh_key" {
+  value     = "The SSH key for access is the one in ${var.ssh_key_file}"
+}
+
+output "my_public_ip" {
+  value = "${data.external.myipaddr.result.ip}"
 }

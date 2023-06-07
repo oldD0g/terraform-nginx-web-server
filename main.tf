@@ -31,7 +31,7 @@ resource "azurerm_network_security_group" "allowedports" {
        destination_address_prefix = "*"
    }
 
-   security_rule {
+  security_rule {
        name = "ssh"
        priority = 300
        direction = "Inbound"
@@ -39,7 +39,7 @@ resource "azurerm_network_security_group" "allowedports" {
        protocol = "Tcp"
        source_port_range = "*"
        destination_port_range = "22"
-       source_address_prefix = "var.myip"
+       source_address_prefix = "${data.external.myipaddr.result.ip}"
        destination_address_prefix = "*"
    }
 }
@@ -73,12 +73,6 @@ resource "azurerm_network_interface" "webserver" {
    depends_on = [azurerm_resource_group.webserver]
 }
 
-# Create (and display) an SSH key
-resource "tls_private_key" "ubuntu_ssh" {
-    algorithm = "RSA"
-    rsa_bits  = 4096
-}
-
 resource "azurerm_linux_virtual_machine" "nginx" {
    size = var.instance_size
    name = "nginx-webserver"
@@ -86,7 +80,8 @@ resource "azurerm_linux_virtual_machine" "nginx" {
    location = azurerm_resource_group.webserver.location
    #custom_data = base64encode(file("scripts/init.sh"))
    #custom_data = filebase64("html/cloud-init-testhtml.yml")
-   custom_data = base64encode(data.cloudinit_config.twofiles.rendered)
+   #custom_data = base64encode(data.cloudinit_config.twofiles.rendered)
+   user_data = data.cloudinit_config.server_config.rendered
    network_interface_ids = [
        azurerm_network_interface.webserver.id,
    ]
@@ -104,7 +99,7 @@ resource "azurerm_linux_virtual_machine" "nginx" {
 
    admin_ssh_key {
     username   = "azzuser"
-    public_key = tls_private_key.ubuntu_ssh.public_key_openssh
+    public_key = file("${var.ssh_key_file}")
   }
 
    os_disk {

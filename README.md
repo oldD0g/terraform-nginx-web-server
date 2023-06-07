@@ -1,5 +1,18 @@
 # Introduction
 
+This is a Terraform build for a simple Nginx server on a Linux instance
+in Azure.
+
+The instance runs on Ubuntu 22.04 LTS "Jammy".
+
+Cloud-init is used to install Docker and run an Nginx container, with a simple
+test file dropped in to test content.
+
+See http://<publicIP>/stuff.html  to test this build.
+
+There are several cloud-init versions included in this code, with different ones
+enabled by un-commenting it in the main.tf file in the instance section.
+
 Once this plan is applied, extract the private key for the Ubuntu Nginx server using:
 
 ```

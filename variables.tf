@@ -15,3 +15,9 @@ variable "environment" {
    description = "Environment"
    default = "dev"
 }
+
+variable "ssh_key_file" {
+    type = string
+    description = "File where existing SSH key is used for loading on instance"
+    default = "../misc/id_rsa_for_azure.pub"
+}
